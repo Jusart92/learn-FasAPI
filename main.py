@@ -8,6 +8,12 @@ app = FastAPI()
 # Models
 
 
+class Location(BaseModel):
+    city: str
+    state: str
+    contry: str
+
+
 class Person(BaseModel):
     first_name: str
     last_name: str
@@ -50,3 +56,21 @@ def show_person(
     person_id: int = Path(..., gt=0)
 ):
     return {person_id: "It exist!"}
+
+# Validaciones: Request Body
+
+
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        title="Person ID",
+        description="This is the person ID",
+        gt=0
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    results = person.dict()
+    results.update(location.dict())
+    return results
