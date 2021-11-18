@@ -68,18 +68,7 @@ class Person(BaseModel):
     is_married: Optional[bool] = Field(
         default=None,
     )
-
-    # class Config:
-    #     schema_extra = {
-    #         "example": {
-    #             "first_name": "John",
-    #             "last_name": "Doe",
-    #             "email": "jusart.92@gmail.com",
-    #             "age": 25,
-    #             "hair_color": "brown",
-    #             "is_married": True,
-    #         }
-    #     }
+    password: str = Field(..., min_length=8)
 
 
 @ app.get("/")
@@ -87,7 +76,7 @@ def home():
     return {"message": "Hello World!"}
 
 
-@ app.post("/person/new")
+@ app.post("/person/new", response_model=Person, response_model_exclude={"password"})
 def create_person(person: Person = Body(...)):
     return person
 
