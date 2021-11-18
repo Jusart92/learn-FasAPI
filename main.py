@@ -8,7 +8,7 @@ from pydantic import Field
 from pydantic import EmailStr
 
 # FastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, params
 from fastapi import status
 from fastapi import HTTPException
 from fastapi import Body, Query, Path, Form, Header, Cookie, File, UploadFile
@@ -95,8 +95,21 @@ def home():
     response_model_exclude={"password"},
     status_code=status.HTTP_201_CREATED,
     tags=["Persons"],
+    summary="Create a new person",
 )
 def create_person(person: Person = Body(...)):
+    """
+    Create Person
+
+    This path operation creates a new person in the appp anda save the information
+    in the database.
+
+    Parameters:
+    - Request body parameters (JSON):
+        - **person: Person** -> A person model with first_name, last_name, email, age, hair_color, is_married and password.
+
+    Returns a person model with the information of the new person.
+    """
     return person
 
 
