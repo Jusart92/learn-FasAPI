@@ -9,6 +9,7 @@ from pydantic import EmailStr
 
 # FastAPI
 from fastapi import FastAPI
+from fastapi import status
 from fastapi import Body, Query, Path
 
 app = FastAPI()
@@ -71,17 +72,25 @@ class Person(BaseModel):
     password: str = Field(..., min_length=8)
 
 
-@ app.get("/")
+@ app.get(path="/", status_code=status.HTTP_200_OK)
 def home():
     return {"message": "Hello World!"}
 
 
-@ app.post("/person/new", response_model=Person, response_model_exclude={"password"})
+@ app.post(
+    path="/person/new",
+    response_model=Person,
+    response_model_exclude={"password"},
+    status_code=status.HTTP_201_CREATED,
+)
 def create_person(person: Person = Body(...)):
     return person
 
 
-@ app.get("/person/detail")
+@ app.get(
+    path="/person/detail",
+    status_code=status.HTTP_200_OK,
+)
 def show_person(
     name: Optional[str] = Query(
         None, min_length=1,
