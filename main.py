@@ -84,7 +84,7 @@ class Person(BaseModel):
     password: str = Field(..., min_length=8)
 
 
-@ app.get(path="/", status_code=status.HTTP_200_OK)
+@ app.get(path="/", status_code=status.HTTP_200_OK, tags=["Home"])
 def home():
     return {"message": "Hello World!"}
 
@@ -94,6 +94,7 @@ def home():
     response_model=Person,
     response_model_exclude={"password"},
     status_code=status.HTTP_201_CREATED,
+    tags=["Persons"],
 )
 def create_person(person: Person = Body(...)):
     return person
@@ -102,6 +103,7 @@ def create_person(person: Person = Body(...)):
 @ app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK,
+    tags=["Persons"],
 )
 def show_person(
     name: Optional[str] = Query(
@@ -125,7 +127,7 @@ def show_person(
 person = [1, 2, 3, 4, 5]
 
 
-@ app.get("/person/detail/{person_id}")
+@ app.get("/person/detail/{person_id}", tags=["Persons"],)
 def show_person(
     person_id: int = Path(
         ...,
@@ -143,7 +145,7 @@ def show_person(
 # Validaciones: Request Body
 
 
-@ app.put("/person/{person_id}")
+@ app.put("/person/{person_id}", tags=["Persons"])
 def update_person(
     person_id: int = Path(
         ...,
@@ -166,6 +168,7 @@ def update_person(
     path="/login",
     response_model=LoginOut,
     status_code=status.HTTP_200_OK,
+    tags=["Users"],
 )
 def login(
     username: str = Form(...),
@@ -179,6 +182,7 @@ def login(
 @app.post(
     path="/contact",
     status_code=status.HTTP_200_OK,
+    tags=["Home"],
 )
 def contact(
     first_name: str = Form(
@@ -207,7 +211,8 @@ def contact(
 
 
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=["Users"]
 )
 def post_image(
     image: UploadFile = File(...)
